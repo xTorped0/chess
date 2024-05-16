@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./normalization.scss";
+
+#root {
+	width: 100vw;
+	height: 100vh;
+
+	display: flex;
+
+	overflow: hidden;
+
+	@apply box-border;
+}
+
+@tailwind variants;
