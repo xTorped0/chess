@@ -107,8 +107,15 @@ export class Game {
 		useBoard.getState().onFigureMove();
 	}
 
-	onMoveEnd() {
+	onMoveEnd(deletedFigure?: Pawn | Rook | Bishop | Knight | Queen) {
 		this.checked = null;
+
+		if (deletedFigure) {
+			const figures =
+				deletedFigure.color === 'white' ? this.whiteFigures : this.blackFigures;
+			const index = figures.indexOf(deletedFigure);
+			if (index !== -1) figures.splice(index, 1);
+		}
 
 		if (this.whiteKing?.isUnderAttack()) {
 			this.checked = this.whiteKing;

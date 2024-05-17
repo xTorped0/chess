@@ -6,9 +6,10 @@ import { useBoard } from './useBoard';
 import { boardFields } from './utils';
 
 export function Board() {
-	const { fields, currentFigure } = useBoard(
+	const { fields, currentFigure, player } = useBoard(
 		useShallow(state => ({
 			fields: state.fields,
+			player: state.playerMove,
 			currentFigure: state.currentFigure
 		}))
 	);
@@ -18,7 +19,14 @@ export function Board() {
 	const availableMoves = currentFigure?.availibleMoves();
 
 	return (
-		<div className='board grid border-navy-400 border rounded-sm grid-cols-8 grid-rows-8'>
+		<div
+			className={clsx(
+				'board grid border-navy-400 border rounded-sm grid-cols-8 grid-rows-8 transform transition-transform duration-300 ease-in-out',
+				{
+					'rotate-180': player === 'white'
+				}
+			)}
+		>
 			{y.map(y => {
 				const isEvenY = +y % 2 === 0;
 

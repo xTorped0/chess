@@ -13,6 +13,7 @@ interface IStore {
 	playerMove?: 'white' | 'black';
 	checked?: Figure | null;
 	checkmate?: Figure | null;
+	deletedFigures?: Figure[];
 	stalemate?: boolean;
 }
 
@@ -45,6 +46,7 @@ export const useBoard = create<IStore & TActions>()(
 						store.checked = checked;
 						store.checkmate = checkmate;
 						store.stalemate = store.game.isStalemate;
+						store.deletedFigures = [...store.game.board.removedFigures];
 					}
 				});
 			},

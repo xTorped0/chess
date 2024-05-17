@@ -53,7 +53,8 @@ export function FigureElement(props: IFigureProps) {
 				'hover:cursor-not-allowed': figure?.color !== playerMove,
 				'border-4 border-red-400': isCurrent,
 				'border-4 border-red-600': !isCurrent && isMovePosition,
-				'bg-red-800': isBgRed
+				'bg-red-800': isBgRed,
+				'rotate-180': playerMove === 'white'
 			})}
 		>
 			{figure?.icon}

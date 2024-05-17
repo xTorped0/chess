@@ -40,7 +40,7 @@ class Board {
 
 		this.fields.set(figure.position, figure);
 
-		this.game.onMoveEnd();
+		this.game.onMoveEnd(fieldFigure!);
 
 		return fieldFigure;
 	}
