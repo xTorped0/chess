@@ -1,21 +1,20 @@
-import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Board } from './Board';
+import { GameEnd } from './GameEnd';
+import { NewGame } from './NewGame';
 import './styles.scss';
 import { useBoard } from './useBoard';
 
 export default function GamePage() {
-	const { initialize, player } = useBoard(
-		useShallow(({ initialize, playerMove }) => ({
-			initialize,
-			player: playerMove
+	const { game, player, checkmate, stalemate } = useBoard(
+		useShallow(({ game, playerMove, checkmate, stalemate }) => ({
+			game,
+			player: playerMove,
+			checkmate,
+			stalemate
 		}))
 	);
-
-	useEffect(() => {
-		initialize();
-	}, []);
 
 	return (
 		<div className='relative flex flex-col justify-center items-center overflow-hidden'>
@@ -23,6 +22,8 @@ export default function GamePage() {
 				<strong className={`text-${player}`}> {player} </strong> turn!{' '}
 			</h1>
 			<Board />
+			{!game && <NewGame />}
+			{(checkmate || stalemate) && <GameEnd />}
 		</div>
 	);
 }

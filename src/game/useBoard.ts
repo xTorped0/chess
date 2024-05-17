@@ -13,6 +13,7 @@ interface IStore {
 	playerMove?: 'white' | 'black';
 	checked?: Figure | null;
 	checkmate?: Figure | null;
+	stalemate?: boolean;
 }
 
 type TActions = {
@@ -43,6 +44,7 @@ export const useBoard = create<IStore & TActions>()(
 
 						store.checked = checked;
 						store.checkmate = checkmate;
+						store.stalemate = store.game.isStalemate;
 					}
 				});
 			},
