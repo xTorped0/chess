@@ -71,17 +71,17 @@ export class Queen extends Figure {
 			while (newX >= 1 && newX <= 8 && newY >= 1 && newY <= 8) {
 				const coord = `${newX}${newY}`;
 
-				if (this.board.canMove(this, coord)) {
-					const field = this.board.getField(`${newX}${newY}`);
+				if (attack || this.board.canMove(this, coord)) {
+					const field = this.board.getField(coord);
 					if (field) {
 						if (field.color === this.color) {
 							break;
 						} else {
-							moves.push(`${newX}${newY}`);
+							moves.push(coord);
 							break;
 						}
 					}
-					moves.push(`${newX}${newY}`);
+					moves.push(coord);
 				}
 
 				newX += dir.dx;
@@ -97,11 +97,11 @@ export class Queen extends Figure {
 	}
 
 	move(position: string) {
-		if (this.availibleMoves().includes(position)) {
-			this.position = position;
-			this.board.setField(this);
+		// if (this.availibleMoves().includes(position)) {
+		this.position = position;
+		this.board.setField(this);
 
-			this.history.push(position);
-		}
+		this.history.push(position);
+		// }
 	}
 }

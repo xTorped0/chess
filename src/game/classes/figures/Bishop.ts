@@ -65,11 +65,11 @@ export class Bishop extends Figure {
 	}
 
 	move(position: string) {
-		if (this.availibleMoves().includes(position)) {
-			this.position = position;
-			this.board.setField(this);
+		// if (this.availibleMoves().includes(position)) {
+		this.position = position;
+		this.board.setField(this);
 
-			this.history.push(position);
-		}
+		this.history.push(position);
+		// }
 	}
 }

@@ -44,7 +44,8 @@ export class King extends Figure {
 			if (newX >= 1 && newX <= 8 && newY >= 1 && newY <= 8) {
 				const field = this.board.getField(`${newX}${newY}`);
 				if (field?.color === this.color) continue;
-				if (!attack && this.canMoveTo(`${newX}${newY}`)) {
+
+				if (attack || this.canMoveTo(`${newX}${newY}`)) {
 					moves.push(`${newX}${newY}`);
 					continue;
 				}
@@ -59,18 +60,21 @@ export class King extends Figure {
 	}
 
 	move(position: string) {
-		if (this.availibleMoves().includes(position)) {
-			this.position = position;
-			this.board.setField(this);
+		// if (this.availibleMoves().includes(position)) {
+		this.position = position;
+		this.board.setField(this);
 
-			this.history.push(position);
-		}
+		this.history.push(position);
+		// }
 	}
 
 	isUnderAttack() {
 		const enemyFigures = [...this.board.fields]
 			.map(([_, figure]) => figure)
-			.filter(figure => figure && figure.color !== this.color) as Figure[];
+			.filter(
+				figure =>
+					figure && figure.color !== this.color && figure.name !== 'King'
+			) as Figure[];
 
 		for (const figure of enemyFigures) {
 			if (figure.couldAttack().includes(this.position)) {
