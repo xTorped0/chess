@@ -15,6 +15,9 @@ export class Game {
 	whiteKing: King | null = null;
 	blackKing: King | null = null;
 
+	whiteFigures: (Pawn | Rook | Bishop | Knight | Queen | King)[] = [];
+	blackFigures: (Pawn | Rook | Bishop | Knight | Queen | King)[] = [];
+
 	checked: King | null = null;
 	checkmate: King | null = null;
 	isStalemate: boolean = false;
@@ -66,7 +69,7 @@ export class Game {
 		});
 		const blackQueen = new Queen({
 			color: 'black',
-			position: '58',
+			position: '48',
 			board: this.board
 		});
 		//
@@ -77,41 +80,67 @@ export class Game {
 		});
 		this.blackKing = new King({
 			color: 'black',
-			position: '48',
+			position: '58',
 			board: this.board
 		});
 
-		this.board.initializeFields([
+		this.whiteFigures = [
 			...whitePawns,
 			...whiteRooks,
 			...whiteBishops,
 			...whiteKnights,
+			whiteQueen,
+			this.whiteKing
+		];
+
+		this.blackFigures = [
 			...blackPawns,
 			...blackRooks,
 			...blackBishops,
 			...blackKnights,
-			whiteQueen,
 			blackQueen,
-			this.whiteKing,
 			this.blackKing
-		]);
+		];
+
+		this.board.initializeFields([...this.whiteFigures, ...this.blackFigures]);
 
 		useBoard.getState().onFigureMove();
 	}
 
 	onMoveEnd() {
+		this.checked = null;
+
 		if (this.whiteKing?.isUnderAttack()) {
 			this.checked = this.whiteKing;
-			if (!this.whiteKing.availibleMoves().length)
-				this.checkmate = this.whiteKing;
+			// if (!this.whiteKing.availibleMoves().length)
+			// 	this.checkmate = this.whiteKing;
 		} else if (this.blackKing?.isUnderAttack()) {
 			this.checked = this.blackKing;
-			if (!this.blackKing.availibleMoves().length)
-				this.checkmate = this.blackKing;
+			// if (!this.blackKing.availibleMoves().length)
+			// 	this.checkmate = this.blackKing;
 		}
 
 		this.move = this.move === 'white' ? 'black' : 'white';
 
+		this.onCheckMate();
+
 		useBoard.getState().onFigureMove();
+	}
+
+	onCheckMate() {
+		const figures =
+			this.move === 'white' ? this.whiteFigures : this.blackFigures;
+		const availableMoves = figures
+			.map(figure => figure.availibleMoves())
+			.flat();
+
+		if (!availableMoves.length) {
+			const king = this.move === 'white' ? this.whiteKing : this.blackKing;
+
+			if (this.checked === king)
+				this.checkmate =
+					this.move === 'white' ? this.whiteKing : this.blackKing;
+			else this.isStalemate = true;
+		}
 	}
 }

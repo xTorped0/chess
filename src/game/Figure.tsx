@@ -32,11 +32,7 @@ export function FigureElement(props: IFigureProps) {
 		}
 
 		takeFigure(
-			currentFigure !== figure &&
-				playerMove === figure?.color &&
-				(!checked || checked === figure)
-				? figure!
-				: null
+			currentFigure !== figure && playerMove === figure?.color ? figure! : null
 		);
 	}
 

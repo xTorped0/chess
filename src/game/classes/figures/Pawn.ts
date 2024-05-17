@@ -32,35 +32,47 @@ export class Pawn extends Figure {
 		const moves: string[] = [];
 
 		if (xLeft >= 1) {
-			const fieldLeft = this.board.getField(`${xLeft}${y1}`);
-			if (fieldLeft && fieldLeft.color !== this.color) {
-				moves.push(`${xLeft}${y1}`);
+			const coord = `${xLeft}${y1}`;
+
+			if (this.board.canMove(this, coord)) {
+				const fieldLeft = this.board.getField(coord);
+				if (fieldLeft && fieldLeft.color !== this.color) {
+					moves.push(coord);
+				}
 			}
 		}
 
 		if (xRight <= 8) {
-			const fieldRight = this.board.getField(`${xRight}${y1}`);
-			if (fieldRight && fieldRight.color !== this.color) {
-				moves.push(`${xRight}${y1}`);
+			const coord = `${xRight}${y1}`;
+
+			if (this.board.canMove(this, coord)) {
+				const fieldRight = this.board.getField(coord);
+				if (fieldRight && fieldRight.color !== this.color) {
+					moves.push(coord);
+				}
 			}
 		}
 
 		// Check field at y1 and y2 for pawn's initial move
-		const fieldY1 = this.board.getField(`${x}${y1}`);
-		const fieldY2 = this.board.getField(`${x}${y2}`);
+		const coordY1 = `${x}${y1}`;
+		const coordY2 = `${x}${y2}`;
+
+		const fieldY1 = this.board.getField(coordY1);
+		const fieldY2 = this.board.getField(coordY2);
 
 		if (!fieldY2) {
-			if (this.history.length === 1) {
-				moves.push(`${x}${y2}`);
+			if (this.history.length === 1 && this.board.canMove(this, coordY2)) {
+				moves.push(coordY2);
 			}
 		}
 
 		if (!fieldY1) {
 			if (
-				(this.color === 'white' && y1 < 8) ||
-				(this.color === 'black' && y1 > 1)
+				this.board.canMove(this, coordY1) &&
+				((this.color === 'white' && y1 < 8) ||
+					(this.color === 'black' && y1 > 1))
 			) {
-				moves.push(`${x}${y1}`);
+				moves.push(coordY1);
 			}
 		}
 
